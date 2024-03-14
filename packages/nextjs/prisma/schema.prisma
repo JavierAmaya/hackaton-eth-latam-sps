@@ -17,8 +17,36 @@ model User {
   bio                   String?
   avatarUrl             String?
   bannerUrl             String?
+  attestations          Attestation[]
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
 
   @@index([id, username, email])
+}
+model Attestation {
+  id                    String              @id @default(uuid())
+  txId                  String              @unique
+  chain                 String
+  schemaId              String
+  attester              String
+  recipient             String
+  student               User?                @relation(fields: [studentId], references: [id])
+  studentId             String
+  studentAlias          String
+  year                  Int
+  period                String
+  subjectName1          String
+  subjectScore1         String
+  subjectName2          String
+  subjectScore2         String
+  subjectName3          String
+  subjectScore3         String
+  subjectName4          String
+  subjectScore4         String
+  subjectName5          String
+  subjectScore5         String
+  subjectName6          String
+  subjectScore6         String
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
 }

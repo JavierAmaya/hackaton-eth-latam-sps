@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { EAS, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
+import { ethers } from "ethers";
 import { WindowProvider } from "wagmi";
 import appConfig from "~~/config";
-import { getEthersSigner } from "../services/web3/ethersAdapters";
 
 declare global {
   interface Window {
     ethereum?: WindowProvider;
   }
 }
-export const useEAS = ({ chainId }: { chainId: number }) => {
+export const useEAS = () => {
   const [eas, setEas] = useState<EAS>();
   const [schemaRegistry, setSchemaRegistry] = useState<SchemaRegistry>();
   const [attesterAddress, setAttesterAddress] = useState("");
@@ -21,27 +21,23 @@ export const useEAS = ({ chainId }: { chainId: number }) => {
         return;
       }
       // Initialize the sdk with the address of the EAS Schema contract address
-      const easInstance = new EAS(appConfig.addresses.optimismMainnet.easContract);
-      const schemaRegistry = new SchemaRegistry(appConfig.addresses.optimismMainnet.schemaRegistryContract);
+      const easInstance = new EAS(appConfig.addresses.scrollSepolia.easContract);
+      const schemaRegistry = new SchemaRegistry(appConfig.addresses.scrollSepolia.schemaRegistryContract);
 
-      const signer = await getEthersSigner({ chainId });
-
-      if (!signer) {
-        console.log("Unable to initialize EAS: no signer found");
-        return;
-      }
-
-      const address = signer.address;
+      // Gets a default provider (in production use something else like infura/alchemy)
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const address = await signer.getAddress();
 
       // Connects an ethers style provider/signingProvider to perform read/write functions.
-      easInstance.connect(signer); // allow users to attest using saved schemas (appConfig file)
-      schemaRegistry.connect(signer); // allow users to register their own reputation schema (not supported in current release)
+      easInstance.connect(signer); // allow clients to attest against freelancer's schema
+      schemaRegistry.connect(signer); // allow Freelancer to register their own reputation schema
       setEas(easInstance);
       setSchemaRegistry(schemaRegistry);
       setAttesterAddress(address);
     };
     init();
-  }, [attesterAddress, chainId, eas, schemaRegistry]);
+  }, [eas, schemaRegistry, attesterAddress]);
 
   return { eas, schemaRegistry, attesterAddress };
 };

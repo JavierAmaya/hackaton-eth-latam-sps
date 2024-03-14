@@ -1,7 +1,6 @@
-const availableNetworks = ["optimismMainnet", "scrollSepolia", "optimismSepolia"] as const;
+const availableNetworks = ["scrollMainnet", "scrollSepolia"] as const;
 type AvailableNetworks = (typeof availableNetworks)[number];
 
-const alchemyRpcUrl = process.env.NEXT_PUBLIC_ALCHEMY_URL ?? "https://mainnet.optimism.io";
 // RPC
 type RPCs = Record<
   AvailableNetworks,
@@ -10,11 +9,8 @@ type RPCs = Record<
   }
 >;
 const rpcs: RPCs = {
-  optimismMainnet: {
-    http: alchemyRpcUrl,
-  },
-  optimismSepolia: {
-    http: "https://sepolia.optimism.io",
+  scrollMainnet: {
+    http: "https://sepolia-rpc.scroll.io",
   },
   scrollSepolia: {
     http: "https://sepolia-rpc.scroll.io",
@@ -30,17 +26,13 @@ type Addresses = Record<
   }
 >;
 const addresses: Addresses = {
-  optimismMainnet: {
-    easContract: "0x4200000000000000000000000000000000000021",
-    schemaRegistryContract: "0x4200000000000000000000000000000000000020",
+  scrollMainnet: {
+    easContract: "0xC47300428b6AD2c7D03BB76D05A176058b47E6B0",
+    schemaRegistryContract: "0xD2CDF46556543316e7D34e8eDc4624e2bB95e3B6",
   },
   scrollSepolia: {
     easContract: "0xaEF4103A04090071165F78D45D83A0C0782c2B2a",
     schemaRegistryContract: "0x55D26f9ae0203EF95494AE4C170eD35f4Cf77797",
-  },
-  optimismSepolia: {
-    easContract: "0x4200000000000000000000000000000000000021",
-    schemaRegistryContract: "0x4200000000000000000000000000000000000020",
   },
 };
 
@@ -53,17 +45,13 @@ type Explorers = Record<
   }
 >;
 const explorers: Explorers = {
-  optimismMainnet: {
-    blockchain: "https://explorer.optimism.io",
-    attestation: "https://optimism.easscan.org/attestation/view",
+  scrollMainnet: {
+    blockchain: "https://scrollscan.com/",
+    attestation: "https://scroll.easscan.org/attestation/view",
   },
   scrollSepolia: {
     blockchain: "https://sepolia.scrollscan.com",
     attestation: "https://scroll-sepolia.easscan.org/attestation/view",
-  },
-  optimismSepolia: {
-    blockchain: "https://sepolia-optimism.etherscan.io",
-    attestation: "https://optimism-sepolia.easscan.org",
   },
 };
 
@@ -76,33 +64,36 @@ type Attestation = {
 type Attestations = Record<
   AvailableNetworks,
   {
-    impactReport: Attestation;
+    gradesReport: Attestation;
+    assistanceReport: Attestation;
   }
 >;
 
 const attestations: Attestations = {
-  optimismMainnet: {
-    impactReport: {
-      id: "0x77d7c27963d7285d3a7c63c6227f52f54634c0e7dd96bf89ce99e1bd00d4bbff",
-      name: "Reporte de Impacto",
+  scrollMainnet: {
+    gradesReport: {
+      id: "0x0000000000000000000000000000000000000000000000000000000000000000",
+      name: "Boleta de Calificaciones",
       schema:
-        "address postAddress, uint256 postTokenId, string postId, string postName, string emotionQuestion, string emotion, string impactQuestion, uint8 impact, string attesterRole",
+        "string studentId, string studentAlias, uint16 year, string period, string subjectName1, string subjectScore1, string subjectName2, string subjectScore2, string subjectName3, string subjectScore3, string subjectName4, string subjectScore4, string subjectName5, string subjectScore5, string subjectName6, string subjectScore6",
+    },
+    assistanceReport: {
+      id: "0x77d7c27963d7285d3a7c63c6227f52f54634c0e7dd96bf89ce99e1bd00d4bbff",
+      name: "Reporte de Asistencia",
+      schema: "string teacherId, string teacherAlias, addresses[] students",
     },
   },
   scrollSepolia: {
-    impactReport: {
-      id: "0x426fe0f5e2eb0ff970e3760b82683aea2198eca82afb2b30122249eaa51a436b",
-      name: "Reporte de Impacto",
+    gradesReport: {
+      id: "0x1564fec3ee6b0bdec2ea10f96041613724baeccee413712e8e37679e69f1f131",
+      name: "Boleta de Calificaciones",
       schema:
-        "address cortoAddress, uint256 cortoTokenId, string cortoId, string cortoName, string emotionQuestion, string emotion, string impactQuestion, uint8 impactRating, string attestRole",
+        "string studentId,string studentAlias,uint16 year,string period,string subjectName1,string subjectScore1,string subjectName2,string subjectScore2,string subjectName3,string subjectScore3,string subjectName4,string subjectScore4,string subjectName5,string subjectScore5,string subjectName6,string subjectScore6",
     },
-  },
-  optimismSepolia: {
-    impactReport: {
-      id: "0x0461f6e91268a14ab7e02e0e4043a41452be0c1306d707c133341a4b0fb875e4",
-      name: "Reporte de Impacto",
-      schema:
-        "string schemaName, string schemaId, address referenceAddress, uint256 referenceTokenId, string referenceUniqueId, string referenceName, string emotionQuestion, string emotion, string impactQuestion, uint8 impact, string attestRole",
+    assistanceReport: {
+      id: "0x77d7c27963d7285d3a7c63c6227f52f54634c0e7dd96bf89ce99e1bd00d4bbff",
+      name: "Reporte de Asistencia",
+      schema: "string teacherId, string teacherAlias, addresses[] students",
     },
   },
 };
