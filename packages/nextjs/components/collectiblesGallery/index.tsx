@@ -124,7 +124,15 @@ function NftCard({ nft }: { nft: Nft }) {
       }}
     >
       <div className="image_container">
-        <Image src={nft.image.pngUrl ?? ""} width={15} height={15} alt="imagen" />
+        {nft.image.pngUrl && (
+          // <Image
+          //   src={nft.image.pngUrl}
+          //   width={100}
+          //   height={100}
+          //   alt="imagen"
+          // />
+          <img src={nft.image.pngUrl} alt="imagen" />
+        )}
         <div className="legend_container">
           <span className={`legend NFT`}>NFT</span>
         </div>

@@ -1,10 +1,11 @@
 // create a basic component
 import React from "react";
+import HeroSection from "../../../components/hero";
 
 const NftDetails = () => {
   return (
     <div>
-      <h1>Details</h1>
+      <HeroSection />
     </div>
   );
 };
