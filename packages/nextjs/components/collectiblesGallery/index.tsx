@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Nft } from "alchemy-sdk";
 
@@ -123,7 +124,7 @@ function NftCard({ nft }: { nft: Nft }) {
       }}
     >
       <div className="image_container">
-        <img src={nft.image.pngUrl} />
+        <Image src={nft.image.pngUrl ?? ""} width={15} height={15} alt="imagen" />
         <div className="legend_container">
           <span className={`legend NFT`}>NFT</span>
         </div>
@@ -144,7 +145,12 @@ function NftCard({ nft }: { nft: Nft }) {
           </div>
           <div className="contract_container">
             <p className="contract_container"></p>
-            <img src={"https://etherscan.io/images/brandassets/etherscan-logo-circle.svg"} width="15px" height="15px" />
+            <Image
+              src="https://etherscan.io/images/brandassets/etherscan-logo-circle.svg"
+              width={15}
+              height={15}
+              alt="imagen"
+            />
           </div>
         </div>
       </div>
